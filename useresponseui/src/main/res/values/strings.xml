@@ -1,0 +1,19 @@
+<resources>
+    <string name="app_name">UseResponse SDK</string>
+    <string name="kb_header_title">Help Center</string>
+    <string name="requests_header_title">Conversations</string>
+    <string name="create_ticket_header">Contact Form</string>
+    <string name="search">Search</string>
+    <string name="articles">Knowledge Base</string>
+    <string name="faqs">Frequently Asked Questions</string>
+    <string name="error_api_request">Request error</string>
+    <string name="search_results">Search Results</string>
+    <string name="result_is_not_found">Result is not found</string>
+    <string name="request_is_not_found">Request is not found</string>
+    <string name="write_a_reply">Write a reply…</string>
+    <string name="subject">Subject</string>
+    <string name="description">Description</string>
+    <string name="submit">Submit</string>
+    <string name="new_ticket">New Ticket</string>
+    <string name="new_chat">New Chat</string>
+</resources>

@@ -1,0 +1,6 @@
+<resources>
+    <string name="app_name">Support</string>
+    <string name="kb_categories">Knowledge Base</string>
+    <string name="kb_articles">All Articles</string>
+    <string name="my_tickets">My Requests</string>
+</resources>
