@@ -9,8 +9,7 @@
           <set>
             <option value="$PROJECT_DIR$" />
             <option value="$PROJECT_DIR$/app" />
-            <option value="$PROJECT_DIR$/useresponseapi" />
-            <option value="$PROJECT_DIR$/useresponseui" />
+            <option value="$PROJECT_DIR$/useresponse" />
           </set>
         </option>
         <option name="resolveModulePerSourceSet" value="false" />

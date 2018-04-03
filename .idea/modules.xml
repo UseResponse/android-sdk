@@ -4,8 +4,7 @@
     <modules>
       <module fileurl="file://$PROJECT_DIR$/URSDKTest.iml" filepath="$PROJECT_DIR$/URSDKTest.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
-      <module fileurl="file://$PROJECT_DIR$/useresponseapi/useresponseapi.iml" filepath="$PROJECT_DIR$/useresponseapi/useresponseapi.iml" />
-      <module fileurl="file://$PROJECT_DIR$/useresponseui/useresponseui.iml" filepath="$PROJECT_DIR$/useresponseui/useresponseui.iml" />
+      <module fileurl="file://$PROJECT_DIR$/useresponse/useresponse.iml" filepath="$PROJECT_DIR$/useresponse/useresponse.iml" />
     </modules>
   </component>
 </project>

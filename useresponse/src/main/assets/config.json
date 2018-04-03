@@ -1,0 +1,12 @@
+{
+  "baseUrl": "https://dev.useresponse.com",
+  "pushWsUrl": "wss://push.useresponse.com:443/ws",
+  "chatWsUrl": "wss://chat.useresponse.com:443/ws",
+  "forumId": 1,
+  "modules": [
+    "knowledge-base",
+    "feedback",
+    "helpdesk",
+    "chat"
+  ]
+}

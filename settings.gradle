@@ -1,1 +1,1 @@
-include ':app', ':useresponseui', ':useresponseapi'
+include ':app', ':useresponse'
