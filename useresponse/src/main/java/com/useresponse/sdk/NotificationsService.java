@@ -25,6 +25,7 @@ import java.util.Map;
 
 public class NotificationsService extends Service {
 
+    private static final int PUSH_INTERFACE_MOBILE = 3;
     private static OnCommentListener onComment = null;
     private static OnChatMessageListener onChatMessage = null;
     private NotificationManager manager;
@@ -176,7 +177,7 @@ public class NotificationsService extends Service {
                         register.put("action", "register");
                         register.put("token", UseResponse.getApiKey());
                         register.put("community", UseResponse.getBaseUrl(NotificationsService.this));
-                        register.put("is_mobile", true);
+                        register.put("interface", PUSH_INTERFACE_MOBILE);
                         websocket.sendText(register.toString());
                     } catch (JSONException e) {
                         Log.e("UrLog", e.getMessage());

@@ -388,10 +388,28 @@ public class Api {
         throw new Exception("Can not create user");
     }
 
-    public static TwilioVoice getTwilioVoice() throws Exception {
-        String responseJson = get(Api.getApiUrl() + "/twilio/voice/token.json");
+    public static TwilioVoice getTwilioVoice(TwilioVoiceQuery query) throws Exception {
+        String url = Api.getApiUrl() + "/twilio/voice/token-app.json";
+
+        if (query.getApiKey() != null) {
+            url += "?apiKey=" + URLEncoder.encode(query.getApiKey(), "UTF-8");
+        }
+
+        String responseJson = get(url);
 
         return responseJson.length() > 0 ? new TwilioVoice(new JSONObject(responseJson)) : null;
+    }
+
+    public static TwilioVideo getTwilioVideo(TwilioVideoQuery query) throws Exception {
+        String url = Api.getApiUrl() + "/twilio/video/token-app.json";
+
+        if (query.getApiKey() != null) {
+            url += "?apiKey=" + URLEncoder.encode(query.getApiKey(), "UTF-8");
+        }
+
+        String responseJson = get(url);
+
+        return responseJson.length() > 0 ? new TwilioVideo(new JSONObject(responseJson)) : null;
     }
 
     private static String get(String url) throws Exception {
