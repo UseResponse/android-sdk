@@ -29,7 +29,7 @@ public class MainActivity extends AppCompatActivity {
             identityData.setLastName("Mobile Tester");
             Api.setIdentityData(identityData);
         } catch (Exception e) {
-            Toast.makeText(this, e.getMessage(), Toast.LENGTH_LONG).show();
+            Toast.makeText(this, e.getMessage() != null ? e.getMessage() : "Unknown error", Toast.LENGTH_LONG).show();
             return;
         }
 

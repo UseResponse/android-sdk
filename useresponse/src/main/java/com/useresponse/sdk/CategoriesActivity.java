@@ -192,8 +192,8 @@ public class CategoriesActivity extends AppCompatActivity {
                         )
                 );
             } catch (Exception e) {
-                error = e.getMessage();
-                Log.e("UrLog", e.getMessage());
+                error = e.getMessage() != null ? e.getMessage() : "Unknown error";
+                Log.e("UrLog", error);
             }
 
             return null;

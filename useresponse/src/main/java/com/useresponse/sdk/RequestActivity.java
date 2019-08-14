@@ -28,6 +28,7 @@ import com.useresponse.sdk.api.ChatMessage;
 import com.useresponse.sdk.api.ChatMessages;
 import com.useresponse.sdk.api.ChatMessagesQuery;
 import com.useresponse.sdk.api.Chats;
+import com.useresponse.sdk.api.ChatsQuery;
 import com.useresponse.sdk.api.Comment;
 import com.useresponse.sdk.api.CommentForm;
 import com.useresponse.sdk.api.CommentsQuery;
@@ -35,6 +36,7 @@ import com.useresponse.sdk.api.FileForm;
 import com.useresponse.sdk.api.Message;
 import com.useresponse.sdk.api.Ticket;
 import com.useresponse.sdk.api.Tickets;
+import com.useresponse.sdk.api.TicketsQuery;
 import com.useresponse.sdk.api.UploadedFile;
 import com.useresponse.sdk.conversation.ConversationListAdapter;
 import com.useresponse.sdk.conversation.ConversationListItem;
@@ -119,7 +121,8 @@ public class RequestActivity extends AppCompatActivity {
                         UseResponse.initIdentity(this, false);
                         activeTicket = Api.getTicket(requestId);
                     } catch (Exception e) {
-                        Log.e("UrLog", e.getMessage());
+                        Log.e("UrLog", e.getMessage() != null ? e.getMessage() : "Unknown error");
+                        e.printStackTrace();
                     }
                 }
 
@@ -160,7 +163,7 @@ public class RequestActivity extends AppCompatActivity {
                             UseResponse.initIdentity(this, false);
                             activeChat = Api.getChat(requestId);
                         } catch (Exception e) {
-                            Log.e("UrLog", e.getMessage());
+                            Log.e("UrLog", e.getMessage() != null ? e.getMessage() : "Unknown error");
                         }
                     }
 
@@ -291,8 +294,8 @@ public class RequestActivity extends AppCompatActivity {
             try {
                 comments = Api.getComments(new CommentsQuery(activeTicket.getId()));
             } catch (Exception e) {
-                error = e.getMessage();
-                Log.e("UrLog", e.getMessage());
+                error = e.getMessage() != null ? e.getMessage() : "Unknown error";
+                Log.e("UrLog", error);
             }
 
             return null;
@@ -368,7 +371,7 @@ public class RequestActivity extends AppCompatActivity {
                             String type = file.isImage() ? "image" : "document";
                             commentsArray.add(new ConversationListItem("incoming", type, attachment.getString("url"), photo));
                         } catch (Exception e) {
-                            Log.e("UrLog", e.getMessage());
+                            Log.e("UrLog", e.getMessage() != null ? e.getMessage() : "Unknown error");
                         }
                     }
 
@@ -381,6 +384,8 @@ public class RequestActivity extends AppCompatActivity {
                             conversationList.setSelection(adapter.getCount() - 1);
                         }
                     });
+
+                    (new UpdateRequestsListTask()).execute();
                 }
 
                 @Override
@@ -409,17 +414,19 @@ public class RequestActivity extends AppCompatActivity {
                 if (fileForm != null) {
                     UploadedFile uploadedFile = Api.uploadFile(fileForm);
                     form.attachFile(uploadedFile.getToken(), fileForm.getName());
-                }
 
-                Comment comment = Api.createComment(form);
-                ArrayList<Message> messages = comment.getMessages();
+                    Comment comment = Api.createComment(form);
+                    ArrayList<Message> messages = comment.getMessages();
 
-                for (Message message : messages) {
-                    commentsArray.add(new ConversationListItem("outgoing", message.getType(), message.getContent(), null));
+                    for (Message message : messages) {
+                        commentsArray.add(new ConversationListItem("outgoing", message.getType(), message.getContent(), null));
+                    }
+                } else {
+                    Api.createComment(form);
                 }
             } catch (Exception e) {
-                error = e.getMessage();
-                Log.e("UrLog", e.getMessage());
+                error = e.getMessage() != null ? e.getMessage() : "Unknown error";
+                Log.e("UrLog", error);
             }
 
             return null;
@@ -441,6 +448,8 @@ public class RequestActivity extends AppCompatActivity {
                 adapter.notifyDataSetChanged();
                 conversationList.setSelection(adapter.getCount() - 1);
             }
+
+            (new UpdateRequestsListTask()).execute();
         }
 
         public void setFileForm(FileForm fileForm) {
@@ -482,8 +491,8 @@ public class RequestActivity extends AppCompatActivity {
 
                 messages = Api.getChatMessages(query);
             } catch (Exception e) {
-                error = e.getMessage();
-                Log.e("UrLog", e.getMessage());
+                error = e.getMessage() != null ? e.getMessage() : "Unknown error";
+                Log.e("UrLog", error);
             }
 
             loadingPage = false;
@@ -518,7 +527,7 @@ public class RequestActivity extends AppCompatActivity {
                             activeChatMessages.add(new ConversationListItem("incoming", message.getType(), message.getContent(), message.getAuthor().getAvatar().getMedium()));
                         }
                     } catch (Exception e) {
-                        Log.e("UrLog", e.getMessage());
+                        Log.e("UrLog", e.getMessage() != null ? e.getMessage() : "Unknown error");
                     }
                 }
 
@@ -534,7 +543,7 @@ public class RequestActivity extends AppCompatActivity {
                             activeChatMessages.add(0, new ConversationListItem("incoming", message.getType(), message.getContent(), message.getAuthor().getAvatar().getMedium()));
                         }
                     } catch (Exception e) {
-                        Log.e("UrLog", e.getMessage());
+                        Log.e("UrLog", e.getMessage() != null ? e.getMessage() : "Unknown error");
                     }
                 }
 
@@ -571,11 +580,11 @@ public class RequestActivity extends AppCompatActivity {
 
                     NotificationsService.sendChatMessage(RequestActivity.this, "mobile.message", msgData);
                 } catch (Exception e) {
-                    Log.e("UrLog", e.getMessage());
+                    Log.e("UrLog", e.getMessage() != null ? e.getMessage() : "Unknown error");
                 }
             } catch (Exception e) {
-                error = e.getMessage();
-                Log.e("UrLog", e.getMessage());
+                error = e.getMessage() != null ? e.getMessage() : "Unknown error";
+                Log.e("UrLog", error);
             }
 
             return null;
@@ -602,6 +611,48 @@ public class RequestActivity extends AppCompatActivity {
             } else {
                 Toast.makeText(RequestActivity.this, error, Toast.LENGTH_LONG).show();
             }
+
+            (new UpdateRequestsListTask()).execute();
+        }
+    }
+
+    private class UpdateRequestsListTask extends AsyncTask<Void, Void, Void> {
+        private String error;
+
+        @Override
+        protected void onPreExecute() {
+        }
+
+        @Override
+        protected Void doInBackground(Void... params) {
+            try {
+                Tickets tickets = UseResponse.hasIdentity(RequestActivity.this)
+                        ? Api.getTickets(new TicketsQuery().setPage(1)) : new Tickets();
+
+                Cache.setAllTickets(tickets);
+                Cache.setTicketPages(tickets.getTotalPages());
+
+                Chats chats = UseResponse.hasIdentity(RequestActivity.this)
+                        ? Api.getChats(new ChatsQuery().setPage(1)) : new Chats();
+
+                Cache.setAllChats(chats);
+                Cache.setChatPages(chats.getTotalPages());
+            } catch (Exception e) {
+                error = e.getMessage() != null ? e.getMessage() : "Unknown error";
+                Log.e("UrLog", error);
+            }
+
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Void result) {
+            if (error != null) {
+                Toast.makeText(RequestActivity.this, error, Toast.LENGTH_LONG).show();
+                return;
+            }
+
+            RequestsActivity.needRefresh = true;
         }
     }
 
@@ -631,8 +682,9 @@ public class RequestActivity extends AppCompatActivity {
                         msgData.put("token", "mobile" + String.valueOf(System.currentTimeMillis()));
 
                         NotificationsService.sendChatMessage(RequestActivity.this, "mobile.message", msgData);
+                        (new UpdateRequestsListTask()).execute();
                     } catch (Exception e) {
-                        Log.e("UrLog", e.getMessage());
+                        Log.e("UrLog", e.getMessage() != null ? e.getMessage() : "Unknown error");
                     }
                 } else {
                     Uploader.pickFile(RequestActivity.this);
@@ -654,7 +706,7 @@ public class RequestActivity extends AppCompatActivity {
                         msgData.put("conversation", activeChat.getId());
                         NotificationsService.sendChatMessage(RequestActivity.this, "mobile.typing", msgData);
                     } catch (Exception e) {
-                        Log.e("UrLog", e.getMessage());
+                        Log.e("UrLog", e.getMessage() != null ? e.getMessage() : "Unknown error");
                     }
                 }
             }
@@ -683,6 +735,8 @@ public class RequestActivity extends AppCompatActivity {
                         conversationList.setSelection(adapter.getCount() - 1);
                     }
                 });
+
+                (new UpdateRequestsListTask()).execute();
             }
 
             @Override
@@ -694,6 +748,7 @@ public class RequestActivity extends AppCompatActivity {
             public void setChatId(int chatId) {
                 if (activeChat.getId() == 0) {
                     activeChat.setId(chatId);
+                    (new UpdateRequestsListTask()).execute();
                 }
             }
         });

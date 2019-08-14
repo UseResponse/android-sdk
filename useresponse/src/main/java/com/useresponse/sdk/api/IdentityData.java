@@ -1,16 +1,23 @@
 package com.useresponse.sdk.api;
 
 import android.text.TextUtils;
+import android.util.Base64;
 import android.util.SparseArray;
 
 import java.util.ArrayList;
 
 public class IdentityData {
+    final public String AVATAR_TYPE_URL      = "url";
+    final public String AVATAR_TYPE_CONTENT  = "content";
+    final public String AVATAR_TYPE_GRAVATAR = "gravatar";
+
     private String token;
     private String email;
     private String id;
     private String firstName;
     private String lastName;
+    private String avatarType;
+    private String avatarContent;
     private SparseArray<String> properties = new SparseArray<>();
 
     public IdentityData(String token, String email) throws IllegalArgumentException {
@@ -74,5 +81,32 @@ public class IdentityData {
 
     public SparseArray<String> getProperties() {
         return properties;
+    }
+
+    public void setAvatar(String avatarType, String avatarContent) throws Exception {
+        if (!avatarType.equals(AVATAR_TYPE_URL) && !avatarType.equals(AVATAR_TYPE_CONTENT) && !avatarType.equals(AVATAR_TYPE_GRAVATAR)) {
+            throw new Exception("Invalid avatar type");
+        }
+
+        if (avatarType.equals(AVATAR_TYPE_CONTENT)) {
+            byte[] contentArray = new byte[avatarContent.length()];
+
+            for (int i = 0; i < avatarContent.length(); i++) {
+                contentArray[i] = (byte)avatarContent.charAt(i);
+            }
+
+            avatarContent = Base64.encodeToString(contentArray, 0);
+        }
+
+        this.avatarType = avatarType;
+        this.avatarContent = avatarContent;
+    }
+
+    public String getAvatarType() {
+        return avatarType != null ? avatarType : "";
+    }
+
+    public String getAvatarContent() {
+        return avatarContent != null ? avatarContent : "";
     }
 }

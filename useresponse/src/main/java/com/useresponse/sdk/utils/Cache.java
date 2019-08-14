@@ -17,6 +17,9 @@ public class Cache {
     private static ArrayList<CustomField> ticketCustomFields;
     private static ImagesLoader imagesLoader = null;
     private static PhotosLoader photosLoader = null;
+    private static int currentPage = 1;
+    private static int chatPages = 1;
+    private static int ticketPages = 1;
 
     public static void setAllArticles(ArrayList<Article> articles) {
         allArticles = articles;
@@ -85,5 +88,29 @@ public class Cache {
                 break;
             }
         }
+    }
+
+    public static void setCurrentPage(int page) {
+        currentPage = page;
+    }
+
+    public static int getCurrentPage() {
+        return currentPage;
+    }
+
+    public static void setChatPages(int pages) {
+        chatPages = pages;
+    }
+
+    public static int getChatPages() {
+        return chatPages;
+    }
+
+    public static void setTicketPages(int pages) {
+        ticketPages = pages;
+    }
+
+    public static int getTicketPages() {
+        return ticketPages;
     }
 }

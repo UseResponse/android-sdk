@@ -14,6 +14,7 @@
         android:layout_height="20dp"
         android:layout_marginStart="20dp"
         android:layout_marginTop="8dp"
+        style="@style/UrArticleIcon"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:srcCompat="@drawable/ic_type_article" />
@@ -29,6 +30,7 @@
         android:singleLine="false"
         android:text="Article Name"
         android:textColor="?android:attr/textColorPrimary"
+        style="@style/UrArticleName"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 

@@ -17,6 +17,7 @@
         android:textColor="@color/colorTextPrimary"
         android:textSize="16sp"
         android:textStyle="bold"
+        style="@style/UrRequestRowText"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -29,6 +30,7 @@
         android:layout_marginTop="2dp"
         android:text="Ticket body"
         android:textColor="@color/colorTextSecondary"
+        style="@style/UrRequestRowDescription"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/requestRowName" />
 
@@ -44,6 +46,7 @@
         android:paddingBottom="1dp"
         android:paddingLeft="8dp"
         android:paddingRight="8dp"
+        style="@style/UrRequestRowStatus"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -55,6 +58,7 @@
         android:layout_marginTop="7dp"
         android:text="Today"
         android:visibility="gone"
+        style="@style/UrRequestRowDate"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -64,6 +68,7 @@
         android:layout_height="50dp"
         android:layout_marginStart="20dp"
         android:layout_marginTop="8dp"
+        style="@style/UrRequestRowPhoto"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:srcCompat="@color/colorWhiteBg" />

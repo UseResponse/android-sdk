@@ -6,4 +6,42 @@
         <item name="android:textColor">@color/colorTextPrimary</item>
     </style>
 
+    <!-- Styles available for customization -->
+    <style name="UrProgressBar" />
+    <style name="UrRequestsList" />
+    <style name="UrNewRequestButton" />
+    <style name="UrNewRequestMenu" />
+    <style name="UrNewTicketButton" />
+    <style name="UrNewChatButton" />
+    <style name="UrRequestMessagePhoto" />
+    <style name="UrRequestIncomingText" />
+    <style name="UrRequestOutgoingText" />
+    <style name="UrRequestIncomingImage" />
+    <style name="UrRequestOutgoingImage" />
+    <style name="UrRequestRowText" />
+    <style name="UrRequestRowDescription" />
+    <style name="UrRequestRowStatus" />
+    <style name="UrRequestRowDate" />
+    <style name="UrRequestRowPhoto" />
+    <style name="UrTicketSubject" />
+    <style name="UrTicketStatus" />
+    <style name="UrTicketDate" />
+    <style name="UrSendInput" />
+    <style name="UrSendButton" />
+    <style name="UrFormButton" />
+    <style name="UrFormSelect" />
+    <style name="UrFormMultiSelect" />
+    <style name="UrFormText" />
+    <style name="UrResultNotFound" />
+    <style name="UrCategoriesList" />
+    <style name="UrCategoryArrow" />
+    <style name="UrCategoryName" />
+    <style name="UrCategorySectionName" />
+    <style name="UrArticleWebView" />
+    <style name="UrArticlesList" />
+    <style name="UrArticleIcon" />
+    <style name="UrArticleName" />
+    <style name="UrArticleSectionName" />
+    <style name="UrHorizontalLine" />
+
 </resources>

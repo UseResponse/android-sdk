@@ -358,6 +358,11 @@ public class Api {
                 postData.put("sso_id", identityData.getId());
             }
 
+            if (identityData.getAvatarType().length() > 0 && identityData.getAvatarContent().length() > 0) {
+                postData.put("avatar_type", identityData.getAvatarType());
+                postData.put("avatar_content", identityData.getAvatarContent());
+            }
+
             SparseArray<String> properties = identityData.getProperties();
             JSONObject postProperties = new JSONObject();
 
@@ -386,6 +391,55 @@ public class Api {
         }
 
         throw new Exception("Can not create user");
+    }
+
+    public static void updateIdentity(String apiKey) throws Exception {
+        if (identityData == null) {
+            return;
+        }
+
+        if (apiKey == null) {
+            apiKey = Api.getApiKey();
+        }
+
+        String url = Api.getApiUrl() + "/profile/update.json?apiKey=" + URLEncoder.encode(apiKey, "UTF-8");
+        JSONObject postData = new JSONObject();
+
+        if (identityData.getFullName().length() > 0) {
+            postData.put("name", identityData.getFullName());
+        }
+
+        if (identityData.getEmail().length() > 0) {
+            postData.put("email", identityData.getEmail());
+        }
+
+        if (identityData.getAvatarType().length() > 0 && identityData.getAvatarContent().length() > 0) {
+            postData.put("avatar_type", identityData.getAvatarType());
+            postData.put("avatar_content", identityData.getAvatarContent());
+        }
+
+        SparseArray<String> properties = identityData.getProperties();
+        JSONObject postProperties = new JSONObject();
+
+        for (int i = 0; i < properties.size(); i++) {
+            int propId = properties.keyAt(i);
+            postProperties.put("property_" + String.valueOf(propId), properties.get(propId));
+        }
+
+        if (properties.size() > 0) {
+            postData.put("properties", postProperties);
+        }
+
+        post(url, postData.toString());
+    }
+
+    public static void subscribeDevice(String deviceToken) throws Exception {
+        get(
+                Api.getApiUrl() + "/push/subscribe-device.json?apiKey="
+                        + URLEncoder.encode(apiKey, "UTF-8")
+                        + "&platform=android&device_token="
+                        + URLEncoder.encode(deviceToken, "UTF-8")
+        );
     }
 
     public static TwilioVoice getTwilioVoice(TwilioVoiceQuery query) throws Exception {

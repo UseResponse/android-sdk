@@ -13,6 +13,7 @@
         android:layout_marginTop="14dp"
         android:layout_marginStart="14dp"
         android:layout_marginEnd="14dp"
+        style="@style/UrFormMultiSelect"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.501"

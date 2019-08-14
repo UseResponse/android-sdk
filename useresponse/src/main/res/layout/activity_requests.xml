@@ -15,6 +15,7 @@
         android:layout_marginEnd="8dp"
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
+        style="@style/UrRequestsList"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -39,6 +40,7 @@
         android:layout_marginEnd="25dp"
         android:clickable="true"
         android:focusable="true"
+        style="@style/UrNewRequestButton"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         fab:fab_icon="@drawable/ic_action_add"
@@ -55,6 +57,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         android:layout_marginBottom="25dp"
         android:layout_marginEnd="25dp"
+        style="@style/UrNewRequestMenu"
         fab:fab_labelStyle="@style/menu_labels_style"
         android:visibility="gone">
 
@@ -62,6 +65,7 @@
             android:id="@+id/menuNewTicket"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            style="@style/UrNewTicketButton"
             fab:fab_title="@string/new_ticket"
             fab:fab_icon="@drawable/ic_action_add"/>
 
@@ -69,6 +73,7 @@
             android:id="@+id/menuNewChat"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            style="@style/UrNewChatButton"
             fab:fab_title="@string/new_chat"
             fab:fab_icon="@drawable/ic_action_add"/>
 

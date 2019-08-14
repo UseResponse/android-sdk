@@ -17,6 +17,7 @@
         android:layout_weight="1"
         android:text="Object Type"
         android:textColor="?android:attr/textColorSecondary"
+        style="@style/UrCategorySectionName"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 

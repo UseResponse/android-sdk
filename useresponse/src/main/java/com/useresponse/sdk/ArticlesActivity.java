@@ -243,8 +243,8 @@ public class ArticlesActivity extends AppCompatActivity {
                     Cache.setAllArticles(articles);
                 }
             } catch (Exception e) {
-                error = e.getMessage();
-                Log.e("UrLog", e.getMessage());
+                error = e.getMessage() != null ? e.getMessage() : "Unknown error";
+                Log.e("UrLog", error);
             }
 
             return null;

@@ -169,7 +169,7 @@ public class CreateTicketActivity extends AppCompatActivity {
             try {
                 fields = Api.getCustomFields("tickets");
             } catch (Exception e) {
-                Log.e("UrLog", e.getMessage());
+                Log.e("UrLog", e.getMessage() != null ? e.getMessage() : "Unknown error");
                 fields = null;
             }
 
@@ -230,8 +230,8 @@ public class CreateTicketActivity extends AppCompatActivity {
                 Cache.setAllTickets(tickets);
                 RequestsActivity.needRefresh = true;
             } catch (Exception e) {
-                Log.e("UrLog", e.getMessage());
-                error = e.getMessage();
+                error = e.getMessage() != null ? e.getMessage() : "Unknown error";
+                Log.e("UrLog", error);
             }
 
             return null;

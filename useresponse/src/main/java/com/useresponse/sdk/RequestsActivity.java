@@ -41,9 +41,6 @@ public class RequestsActivity extends AppCompatActivity {
     private ListView requestsList;
     private ProgressBar loader;
     private boolean loadingPage = false;
-    private int ticketPages = 1;
-    private int chatPages = 1;
-    private int currentPage = 1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -123,9 +120,10 @@ public class RequestsActivity extends AppCompatActivity {
                     firstVisibleItem+visibleItemCount == totalItemCount &&
                     totalItemCount != 0 &&
                     !loadingPage &&
-                    (currentPage < chatPages || currentPage < ticketPages)
+                    (Cache.getCurrentPage() < Cache.getChatPages() || Cache.getCurrentPage() < Cache.getTicketPages())
                 ) {
-                    (new LoadTask(++currentPage)).execute();
+                    Cache.setCurrentPage(Cache.getCurrentPage() + 1);
+                    (new LoadTask(Cache.getCurrentPage())).execute();
                 }
             }
         });
@@ -210,7 +208,7 @@ public class RequestsActivity extends AppCompatActivity {
             try {
                 UseResponse.initIdentity(RequestsActivity.this, false);
 
-                if (page <= ticketPages) {
+                if (page <= Cache.getTicketPages()) {
                     Tickets tickets = UseResponse.hasIdentity(RequestsActivity.this)
                             ? Api.getTickets(new TicketsQuery().setPage(page)) : new Tickets();
 
@@ -221,11 +219,11 @@ public class RequestsActivity extends AppCompatActivity {
                     }
 
                     if (page == 1) {
-                        ticketPages = tickets.getTotalPages();
+                        Cache.setTicketPages(tickets.getTotalPages());
                     }
                 }
 
-                if (page <= chatPages) {
+                if (page <= Cache.getChatPages()) {
                     Chats chats = UseResponse.hasIdentity(RequestsActivity.this)
                             ? Api.getChats(new ChatsQuery().setPage(page)) : new Chats();
 
@@ -236,12 +234,12 @@ public class RequestsActivity extends AppCompatActivity {
                     }
 
                     if (page == 1) {
-                        chatPages = chats.getTotalPages();
+                        Cache.setChatPages(chats.getTotalPages());
                     }
                 }
             } catch (Exception e) {
-                error = e.getMessage();
-                Log.e("UrLog", e.getMessage());
+                error = e.getMessage() != null ? e.getMessage() : "Unknown error";
+                Log.e("UrLog", error);
             }
 
             loadingPage = false;

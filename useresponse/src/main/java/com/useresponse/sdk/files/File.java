@@ -62,14 +62,14 @@ public class File {
                 }
             }
         } catch (Exception e) {
-            Log.e("UrLog", e.getMessage());
+            Log.e("UrLog", e.getMessage() != null ? e.getMessage() : "Unknown error");
         }
 
         if (input != null) {
             try {
                 input.close();
             } catch (Exception e) {
-                Log.e("UrLog", e.getMessage());
+                Log.e("UrLog", e.getMessage() != null ? e.getMessage() : "Unknown error");
             }
         }
 

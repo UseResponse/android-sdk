@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.os.StrictMode;
 import android.util.Log;
 import android.widget.Toast;
 
@@ -26,10 +27,13 @@ public class UseResponse {
             return true;
         }
 
+        StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
+        StrictMode.setThreadPolicy(policy);
+
         try {
             Api.setApiUrl(getBaseUrl(context) + "/api/4.0");
         } catch (Exception e) {
-            Toast.makeText(context, e.getMessage(), Toast.LENGTH_LONG).show();
+            Toast.makeText(context, e.getMessage() != null ? e.getMessage() : "Unknown error", Toast.LENGTH_LONG).show();
             return false;
         }
 
@@ -86,8 +90,8 @@ public class UseResponse {
         try {
             return getConfig(context).getString("baseUrl");
         } catch (Exception e) {
-            Log.e("UrLog", e.getMessage());
-            Toast.makeText(context, e.getMessage(), Toast.LENGTH_LONG).show();
+            Log.e("UrLog", e.getMessage() != null ? e.getMessage() : "Unknown error");
+            Toast.makeText(context, e.getMessage() != null ? e.getMessage() : "Unknown error", Toast.LENGTH_LONG).show();
         }
 
         return "";
@@ -97,8 +101,8 @@ public class UseResponse {
         try {
             return getConfig(context).getString("pushWsUrl");
         } catch (Exception e) {
-            Log.e("UrLog", e.getMessage());
-            Toast.makeText(context, e.getMessage(), Toast.LENGTH_LONG).show();
+            Log.e("UrLog", e.getMessage() != null ? e.getMessage() : "Unknown error");
+            Toast.makeText(context, e.getMessage() != null ? e.getMessage() : "Unknown error", Toast.LENGTH_LONG).show();
         }
 
         return "";
@@ -108,8 +112,8 @@ public class UseResponse {
         try {
             return getConfig(context).getString("chatWsUrl");
         } catch (Exception e) {
-            Log.e("UrLog", e.getMessage());
-            Toast.makeText(context, e.getMessage(), Toast.LENGTH_LONG).show();
+            Log.e("UrLog", e.getMessage() != null ? e.getMessage() : "Unknown error");
+            Toast.makeText(context, e.getMessage() != null ? e.getMessage() : "Unknown error", Toast.LENGTH_LONG).show();
         }
 
         return "";
@@ -126,8 +130,8 @@ public class UseResponse {
             }
 
         } catch (Exception e) {
-            Log.e("UrLog", e.getMessage());
-            Toast.makeText(context, e.getMessage(), Toast.LENGTH_LONG).show();
+            Log.e("UrLog", e.getMessage() != null ? e.getMessage() : "Unknown error");
+            Toast.makeText(context, e.getMessage() != null ? e.getMessage() : "Unknown error", Toast.LENGTH_LONG).show();
         }
 
         return false;
@@ -142,8 +146,8 @@ public class UseResponse {
             forumId = getConfig(context).getInt("forumId");
         } catch (Exception e) {
             forumId = 0;
-            Log.e("UrLog", e.getMessage());
-            Toast.makeText(context, e.getMessage(), Toast.LENGTH_LONG).show();
+            Log.e("UrLog", e.getMessage() != null ? e.getMessage() : "Unknown error");
+            Toast.makeText(context, e.getMessage() != null ? e.getMessage() : "Unknown error", Toast.LENGTH_LONG).show();
         }
 
         return forumId;

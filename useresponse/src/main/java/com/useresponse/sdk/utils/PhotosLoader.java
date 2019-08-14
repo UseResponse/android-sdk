@@ -9,6 +9,8 @@ import android.support.v4.graphics.drawable.RoundedBitmapDrawableFactory;
 import android.util.Log;
 import android.widget.ImageView;
 
+import com.useresponse.sdk.R;
+
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -26,6 +28,11 @@ public class PhotosLoader {
     }
 
     public void process(String url, ImageView photo) {
+        if (url.toLowerCase().endsWith(".svg") || url.toLowerCase().startsWith("data:")) {
+            photo.setImageResource(R.drawable.ic_default_avatar);
+            return;
+        }
+
         Item item = queue.get(url);
 
         if (item == null) {
@@ -68,7 +75,7 @@ public class PhotosLoader {
                 InputStream in = new java.net.URL(url).openStream();
                 bitmap = BitmapFactory.decodeStream(in);
             } catch (Exception e) {
-                Log.e("UrLog", e.getMessage());
+                Log.e("UrLog", e.getMessage() != null ? e.getMessage() : "Unknown error");
             }
 
             return null;

@@ -79,7 +79,7 @@ public class NotificationsService extends Service {
 
                 chatWs.sendText(message.toString());
             } catch (JSONException e) {
-                Log.e("UrLog", e.getMessage());
+                Log.e("UrLog", e.getMessage() != null ? e.getMessage() : "Unknown error");
             }
         }
     }
@@ -116,7 +116,10 @@ public class NotificationsService extends Service {
             commonWs.addListener(new WebSocketAdapter() {
                 @Override
                 public void onTextMessage(WebSocket websocket, String text) throws Exception {
-                    Log.d("UrLog", text);
+                    if (!text.equals("{\"action\":\"ping\"}")) {
+                        Log.d("UrLog", text);
+                    }
+
                     JSONObject message = new JSONObject(text);
 
                     if (message.getString("action").equals("new_comment_mobile_app")) {
@@ -180,7 +183,7 @@ public class NotificationsService extends Service {
                         register.put("interface", PUSH_INTERFACE_MOBILE);
                         websocket.sendText(register.toString());
                     } catch (JSONException e) {
-                        Log.e("UrLog", e.getMessage());
+                        Log.e("UrLog", e.getMessage() != null ? e.getMessage() : "Unknown error");
                     }
                 }
 
@@ -197,7 +200,7 @@ public class NotificationsService extends Service {
 
             commonWs.connectAsynchronously();
         } catch (Exception e) {
-            Log.e("UrLog", e.getMessage());
+            Log.e("UrLog", e.getMessage() != null ? e.getMessage() : "Unknown error");
         }
     }
 
@@ -210,7 +213,10 @@ public class NotificationsService extends Service {
             chatWs.addListener(new WebSocketAdapter() {
                 @Override
                 public void onTextMessage(WebSocket websocket, String text) throws Exception {
-                    Log.d("UrLog", text);
+                    if (!text.equals("{\"action\":\"ping\"}")) {
+                        Log.d("UrLog", text);
+                    }
+
                     JSONObject message = new JSONObject(text);
                     processIncomingMessage(message);
                 }
@@ -234,7 +240,7 @@ public class NotificationsService extends Service {
 
             chatWs.connectAsynchronously();
         } catch (Exception e) {
-            Log.e("UrLog", e.getMessage());
+            Log.e("UrLog", e.getMessage() != null ? e.getMessage() : "Unknown error");
         }
     }
 
@@ -275,6 +281,16 @@ public class NotificationsService extends Service {
                     int chatId = msgData.getInt("conversation");
                     String chatType = msgData.getString("type");
                     String chatContent = msgData.getString("content");
+
+                    if (chatType.equals("article")) {
+                        chatType = "text";
+                        try {
+                            JSONObject article = new JSONObject(chatContent);
+                            chatContent = article.getString("title") + "\n" + article.getString("link");
+                        } catch (JSONException e) {
+                            Log.e("UrLog", e.getMessage() != null ? e.getMessage() : "Unknown error");
+                        }
+                    }
 
                     if (NotificationsService.onChatMessage != null) {
                         Log.d("UrLog", "New Chat Message. Listener is set.");
@@ -325,7 +341,7 @@ public class NotificationsService extends Service {
                     break;
             }
         } catch (Exception e) {
-            Log.e("UrLog", e.getMessage());
+            Log.e("UrLog", e.getMessage() != null ? e.getMessage() : "Unknown error");
         }
     }
 }

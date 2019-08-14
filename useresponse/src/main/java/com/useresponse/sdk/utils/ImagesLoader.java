@@ -63,7 +63,7 @@ public class ImagesLoader {
                 InputStream in = new java.net.URL(url).openStream();
                 bitmap = BitmapFactory.decodeStream(in);
             } catch (Exception e) {
-                Log.e("UrLog", e.getMessage());
+                Log.e("UrLog", e.getMessage() != null ? e.getMessage() : "Unknown error");
             }
 
             return null;
