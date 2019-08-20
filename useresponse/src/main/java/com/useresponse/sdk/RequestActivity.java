@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.net.Uri;
 import android.os.AsyncTask;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.Editable;
@@ -76,7 +77,10 @@ public class RequestActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_request);
         setTitle(getString(R.string.kb_header_title));
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        ActionBar sab = getSupportActionBar();
+        if (sab != null) {
+            sab.setDisplayHomeAsUpEnabled(true);
+        }
 
         if (!UseResponse.init(this)) {
             return;

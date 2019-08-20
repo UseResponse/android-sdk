@@ -2,6 +2,7 @@ package com.useresponse.sdk;
 
 import android.content.Intent;
 import android.os.AsyncTask;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.SearchView;
@@ -39,7 +40,10 @@ public class CategoriesActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_categories);
         setTitle(getString(R.string.kb_header_title));
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        ActionBar sab = getSupportActionBar();
+        if (sab != null) {
+            sab.setDisplayHomeAsUpEnabled(true);
+        }
 
         if (!UseResponse.init(this)) {
             return;

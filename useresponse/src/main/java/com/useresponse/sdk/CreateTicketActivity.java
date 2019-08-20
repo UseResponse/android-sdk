@@ -2,6 +2,7 @@ package com.useresponse.sdk;
 
 import android.content.Intent;
 import android.os.AsyncTask;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -46,7 +47,10 @@ public class CreateTicketActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_create_ticket);
         setTitle(getString(R.string.create_ticket_header));
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        ActionBar sab = getSupportActionBar();
+        if (sab != null) {
+            sab.setDisplayHomeAsUpEnabled(true);
+        }
 
         if (!UseResponse.init(this)) {
             return;

@@ -2,6 +2,7 @@ package com.useresponse.sdk;
 
 import android.content.Intent;
 import android.os.AsyncTask;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -47,7 +48,10 @@ public class RequestsActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_requests);
         setTitle(getString(R.string.requests_header_title));
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        ActionBar sab = getSupportActionBar();
+        if (sab != null) {
+            sab.setDisplayHomeAsUpEnabled(true);
+        }
 
         if (!UseResponse.init(this)) {
             return;
