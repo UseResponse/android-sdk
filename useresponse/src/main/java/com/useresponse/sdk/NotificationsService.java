@@ -275,12 +275,16 @@ public class NotificationsService extends Service {
                 return;
             }
 
+            int chatId;
+            String chatType;
+            String chatContent;
+
             switch (message.getString("action")) {
                 case "update.message":
                     JSONObject msgData = message.getJSONObject("data");
-                    int chatId = msgData.getInt("conversation");
-                    String chatType = msgData.getString("type");
-                    String chatContent = msgData.getString("content");
+                    chatId = msgData.getInt("conversation");
+                    chatType = msgData.getString("type");
+                    chatContent = msgData.getString("content");
 
                     if (chatType.equals("article")) {
                         chatType = "text";
@@ -336,6 +340,31 @@ public class NotificationsService extends Service {
 
                         Notification notification = builder.build();
                         manager.notify(++notificationId, notification);
+                    }
+
+                    break;
+                case "push_message":
+                    JSONObject pushContent = message.getJSONObject("content");
+                    chatId = message.getInt("conversation");
+
+                    if (pushContent.getString("type").equals("message")) {
+                        chatType    = "text";
+                        chatContent = pushContent.getString("body");
+                    } else {
+                        chatType    = "article";
+                        chatContent = pushContent.getString("articleTitle") + "\n" + pushContent.getString("articleLink");
+                    }
+
+                    if (NotificationsService.onChatMessage != null) {
+                        Log.d("UrLog", "Push Chat Message. Listener is set.");
+
+                        NotificationsService.onChatMessage.received(
+                                chatId,
+                                chatType,
+                                chatContent,
+                                "",
+                                message.getString("userPhoto")
+                        );
                     }
 
                     break;

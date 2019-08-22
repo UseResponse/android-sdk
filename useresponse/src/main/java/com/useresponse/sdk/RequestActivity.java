@@ -752,6 +752,7 @@ public class RequestActivity extends AppCompatActivity {
             public void setChatId(int chatId) {
                 if (activeChat.getId() == 0) {
                     activeChat.setId(chatId);
+                    UseResponse.saveSingleChat(RequestActivity.this, chatId);
                     (new UpdateRequestsListTask()).execute();
                 }
             }

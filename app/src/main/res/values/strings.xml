@@ -3,4 +3,5 @@
     <string name="kb_categories">Knowledge Base</string>
     <string name="kb_articles">All Articles</string>
     <string name="my_tickets">My Requests</string>
+    <string name="single_chat">Single Chat</string>
 </resources>

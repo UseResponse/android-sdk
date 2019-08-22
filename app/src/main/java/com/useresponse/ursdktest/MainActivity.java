@@ -12,6 +12,7 @@ import com.useresponse.sdk.CategoriesActivity;
 import com.useresponse.sdk.RequestsActivity;
 import com.useresponse.sdk.api.Api;
 import com.useresponse.sdk.api.IdentityData;
+import com.useresponse.sdk.utils.UseResponse;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -22,18 +23,30 @@ public class MainActivity extends AppCompatActivity {
 
         try {
             IdentityData identityData = new IdentityData(
-                    "b0ddbee99d8452b580373785fa2ad61bf6fe62139b5b2af772751f901eac64c8",
-                    "cc402f30e1b93652bc4b849bbdc15d15@mobile"
+                    "d9d42888a65ac2aff33a2471f5a7de3238767c5561b44cd280f30c014dba6bd1",
+                    "beldevoper@gmail.com"
             );
             identityData.setFirstName("Alex");
             identityData.setLastName("Mobile Tester");
+            /*IdentityData identityData = new IdentityData(
+                    "e261c5cb8d67802645987a35b5050c927976f43ebee69a4cac8c255ff95600f4",
+                    "miss.lisa007@yandex.ru"
+            );
+            identityData.setFirstName("Miss");
+            identityData.setLastName("Lisa");*/
+            /*IdentityData identityData = new IdentityData(
+                    "c70d55adde01752adb5fad66920e4ebffed4f94d56774fad780439749e4d4601",
+                    "kurchik.sasha@mail.ru"
+            );
+            identityData.setFirstName("Alex");
+            identityData.setLastName("Kurchik");*/
             Api.setIdentityData(identityData);
         } catch (Exception e) {
             Toast.makeText(this, e.getMessage() != null ? e.getMessage() : "Unknown error", Toast.LENGTH_LONG).show();
             return;
         }
 
-        Button buttonCategories = (Button) findViewById(R.id.openCategories);
+        Button buttonCategories = findViewById(R.id.openCategories);
         buttonCategories.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -43,7 +56,7 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        Button buttonArticles = (Button) findViewById(R.id.openArticles);
+        Button buttonArticles = findViewById(R.id.openArticles);
         buttonArticles.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -53,12 +66,20 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        Button buttonTickets = (Button) findViewById(R.id.openTickets);
+        Button buttonTickets = findViewById(R.id.openTickets);
         buttonTickets.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(MainActivity.this, RequestsActivity.class);
                 MainActivity.this.startActivity(intent);
+            }
+        });
+
+        Button buttonChat = findViewById(R.id.singleChat);
+        buttonChat.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                UseResponse.openSingleChat(MainActivity.this);
             }
         });
     }

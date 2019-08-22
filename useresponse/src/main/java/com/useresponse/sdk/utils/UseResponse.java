@@ -9,6 +9,7 @@ import android.util.Log;
 import android.widget.Toast;
 
 import com.useresponse.sdk.NotificationsService;
+import com.useresponse.sdk.RequestActivity;
 import com.useresponse.sdk.api.Api;
 import com.useresponse.sdk.api.IdentityData;
 import com.useresponse.sdk.api.User;
@@ -32,6 +33,7 @@ public class UseResponse {
 
         try {
             Api.setApiUrl(getBaseUrl(context) + "/api/4.0");
+            Log.d("UrLog", "Set API URL: " + getBaseUrl(context) + "/api/4.0");
         } catch (Exception e) {
             Toast.makeText(context, e.getMessage() != null ? e.getMessage() : "Unknown error", Toast.LENGTH_LONG).show();
             return false;
@@ -163,5 +165,28 @@ public class UseResponse {
         }
 
         return config;
+    }
+
+    public static void openSingleChat(Activity activity) {
+        try {
+            UseResponse.initIdentity(activity, false);
+        } catch (Exception e) {
+            String error = e.getMessage() != null ? e.getMessage() : "Unknown error";
+            Log.e("UrLog", error);
+            Toast.makeText(activity, error, Toast.LENGTH_LONG).show();
+            return;
+        }
+
+        SharedPreferences preferences = activity.getSharedPreferences("useresponseui", Context.MODE_PRIVATE);
+        Intent intent = new Intent(activity, RequestActivity.class);
+        intent.putExtra("requestType", "chat");
+        intent.putExtra("requestId", preferences.getInt("singleChatId", 0));
+        activity.startActivity(intent);
+    }
+
+    public static void saveSingleChat(Activity activity, int chatId) {
+        SharedPreferences.Editor editor = activity.getSharedPreferences("useresponseui", Context.MODE_PRIVATE).edit();
+        editor.putInt("singleChatId", chatId);
+        editor.apply();
     }
 }
