@@ -168,6 +168,10 @@ public class UseResponse {
     }
 
     public static void openSingleChat(Activity activity) {
+        if (!UseResponse.init(activity)) {
+            return;
+        }
+
         try {
             UseResponse.initIdentity(activity, false);
         } catch (Exception e) {
