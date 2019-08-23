@@ -20,6 +20,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -35,6 +36,8 @@ public class NotificationsService extends Service {
     private static int chatWsRequestId = 0;
     private static int chatWsRegisterId;
     private static int newConversationId;
+    private static boolean chatWsRegistered = false;
+    private static ArrayList<ChatWsQueueItem> chatWsQueue = new ArrayList<>();
 
     @Override
     public void onCreate() {
@@ -61,6 +64,15 @@ public class NotificationsService extends Service {
     }
 
     public static void sendChatMessage(Context context, String action, JSONObject data) {
+        if (!chatWsRegistered && action.equals("mobile.message")) {
+            ChatWsQueueItem queueItem = new ChatWsQueueItem();
+            queueItem.context = context;
+            queueItem.action  = action;
+            queueItem.data    = data;
+            chatWsQueue.add(queueItem);
+            return;
+        }
+
         if (chatWs != null) {
             try {
                 JSONObject message = new JSONObject();
@@ -78,6 +90,7 @@ public class NotificationsService extends Service {
                 }
 
                 chatWs.sendText(message.toString());
+                Log.d("UrLog", "Send chat message: " + message.toString());
             } catch (JSONException e) {
                 Log.e("UrLog", e.getMessage() != null ? e.getMessage() : "Unknown error");
             }
@@ -105,6 +118,12 @@ public class NotificationsService extends Service {
 
     public interface OnChatUploadedFileListener {
         public void received(int chatId, String type, String content, String fileName, String photo);
+    }
+
+    public static class ChatWsQueueItem {
+        public Context context;
+        public String action;
+        public JSONObject data;
     }
 
     private void runCommonWs() {
@@ -246,6 +265,13 @@ public class NotificationsService extends Service {
 
     private void processIncomingMessage(JSONObject message) {
         try {
+            if (message.has("id") && message.getInt("id") == chatWsRegisterId && message.has("success") && message.getBoolean("success")) {
+                chatWsRegistered = true;
+                for (ChatWsQueueItem item : chatWsQueue) {
+                    sendChatMessage(item.context, item.action, item.data);
+                }
+            }
+
             if (message.has("id") && message.has("success") && message.has("updates")) {
                 if (message.getBoolean("success") && !message.isNull("updates") && message.getInt("id") == chatWsRegisterId) {
                     JSONArray updates = message.getJSONArray("updates");

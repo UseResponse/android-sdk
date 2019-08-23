@@ -52,17 +52,22 @@ public class UseResponse {
         }
 
         User user = Api.getIdentity(createIfNotSet);
+        SharedPreferences.Editor editor;
 
         if (user != null && user.getApiKey().length() > 0) {
             IdentityData identityData = Api.getIdentityData();
             apiKey = user.getApiKey();
-            SharedPreferences.Editor editor = activity.getSharedPreferences("useresponseui", Context.MODE_PRIVATE).edit();
+            editor = activity.getSharedPreferences("useresponseui", Context.MODE_PRIVATE).edit();
             editor.clear();
             editor.putString("urApiKey", apiKey);
             editor.putString("userToken", identityData != null ? identityData.getToken() : "");
             editor.apply();
             Api.setApiKey(apiKey);
             activity.startService(new Intent(activity, NotificationsService.class));
+        } else {
+            editor = activity.getSharedPreferences("useresponseui", Context.MODE_PRIVATE).edit();
+            editor.clear();
+            editor.apply();
         }
     }
 

@@ -247,7 +247,9 @@ public class RequestActivity extends AppCompatActivity {
                 break;
             case "chat":
                 String type = file.isImage() ? "image" : "document";
-                new PostChatAttachmentTask(type, fileForm).execute();
+                PostChatMessageTask postMessage = new PostChatMessageTask(type, "");
+                postMessage.setFileForm(fileForm);
+                postMessage.execute();
                 break;
             default:
                 attachmentDialog.dismiss();
@@ -525,10 +527,19 @@ public class RequestActivity extends AppCompatActivity {
                             topId = message.getId();
                         }
 
+                        String messageType    = message.getType();
+                        String messageContent = message.getContent();
+
+                        if (messageType.equals("article")) {
+                            messageType = "text";
+                            JSONObject article = new JSONObject(messageContent);
+                            messageContent = article.getString("title") + "\n" + article.getString("link");
+                        }
+
                         if (activeChat.getAuthor().getId() == message.getAuthor().getId()) {
-                            activeChatMessages.add(new ConversationListItem("outgoing", message.getType(), message.getContent(), null));
+                            activeChatMessages.add(new ConversationListItem("outgoing", messageType, messageContent, null));
                         } else {
-                            activeChatMessages.add(new ConversationListItem("incoming", message.getType(), message.getContent(), message.getAuthor().getAvatar().getMedium()));
+                            activeChatMessages.add(new ConversationListItem("incoming", messageType, messageContent, message.getAuthor().getAvatar().getMedium()));
                         }
                     } catch (Exception e) {
                         Log.e("UrLog", e.getMessage() != null ? e.getMessage() : "Unknown error");
@@ -558,34 +569,40 @@ public class RequestActivity extends AppCompatActivity {
         }
     }
 
-    private class PostChatAttachmentTask extends AsyncTask<Void, Void, Void> {
+    private class PostChatMessageTask extends AsyncTask<Void, Void, Void> {
         private String error;
         private String type;
+        private String message;
         private FileForm fileForm;
         private UploadedFile uploadedFile;
 
-        PostChatAttachmentTask(String type, FileForm fileForm) {
+        PostChatMessageTask(String type, String message) {
             this.type = type;
+            this.message = message;
+        }
+
+        public void setFileForm(FileForm fileForm) {
             this.fileForm = fileForm;
         }
 
         @Override
         protected Void doInBackground(Void... params) {
             try {
-                uploadedFile = Api.uploadFile(fileForm);
+                UseResponse.initIdentity(RequestActivity.this, true);
+                JSONObject msgData = new JSONObject();
+                msgData.put("conversation", activeChat.getId());
+                msgData.put("type", type);
 
-                try {
-                    JSONObject msgData = new JSONObject();
-                    msgData.put("conversation", activeChat.getId());
-                    msgData.put("type", type);
+                if (fileForm == null) {
+                    msgData.put("content", message);
+                } else {
+                    uploadedFile = Api.uploadFile(fileForm);
                     msgData.put("content", uploadedFile.getUrl());
                     msgData.put("fileName", fileForm.getName());
-                    msgData.put("token", "mobile" + String.valueOf(System.currentTimeMillis()));
-
-                    NotificationsService.sendChatMessage(RequestActivity.this, "mobile.message", msgData);
-                } catch (Exception e) {
-                    Log.e("UrLog", e.getMessage() != null ? e.getMessage() : "Unknown error");
                 }
+
+                msgData.put("token", "mobile" + String.valueOf(System.currentTimeMillis()));
+                NotificationsService.sendChatMessage(RequestActivity.this, "mobile.message", msgData);
             } catch (Exception e) {
                 error = e.getMessage() != null ? e.getMessage() : "Unknown error";
                 Log.e("UrLog", error);
@@ -596,27 +613,28 @@ public class RequestActivity extends AppCompatActivity {
 
         @Override
         protected void onPostExecute(Void result) {
-            attachmentDialog.dismiss();
-
             if (error == null) {
-                activeChatMessages.add(new ConversationListItem("outgoing", this.type, uploadedFile.getUrl(), null));
-                Cache.touchChat(activeChat.getId());
-                RequestsActivity.needRefresh = true;
+                if (fileForm != null) {
+                    attachmentDialog.dismiss();
+                    activeChatMessages.add(new ConversationListItem("outgoing", this.type, uploadedFile.getUrl(), null));
+                    Cache.touchChat(activeChat.getId());
+                    RequestsActivity.needRefresh = true;
 
-                // otherwise it throws "Only the original thread that created a view hierarchy can touch its views."
-                runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        BaseAdapter adapter = (BaseAdapter)conversationList.getAdapter();
-                        adapter.notifyDataSetChanged();
-                        conversationList.setSelection(adapter.getCount() - 1);
-                    }
-                });
+                    // otherwise it throws "Only the original thread that created a view hierarchy can touch its views."
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            BaseAdapter adapter = (BaseAdapter)conversationList.getAdapter();
+                            adapter.notifyDataSetChanged();
+                            conversationList.setSelection(adapter.getCount() - 1);
+                        }
+                    });
+                }
+
+                (new UpdateRequestsListTask()).execute();
             } else {
                 Toast.makeText(RequestActivity.this, error, Toast.LENGTH_LONG).show();
             }
-
-            (new UpdateRequestsListTask()).execute();
         }
     }
 
@@ -678,18 +696,7 @@ public class RequestActivity extends AppCompatActivity {
                     Cache.touchChat(activeChat.getId());
                     RequestsActivity.needRefresh = true;
 
-                    try {
-                        JSONObject msgData = new JSONObject();
-                        msgData.put("conversation", activeChat.getId());
-                        msgData.put("type", "text");
-                        msgData.put("content", message);
-                        msgData.put("token", "mobile" + String.valueOf(System.currentTimeMillis()));
-
-                        NotificationsService.sendChatMessage(RequestActivity.this, "mobile.message", msgData);
-                        (new UpdateRequestsListTask()).execute();
-                    } catch (Exception e) {
-                        Log.e("UrLog", e.getMessage() != null ? e.getMessage() : "Unknown error");
-                    }
+                    new PostChatMessageTask("text", message).execute();
                 } else {
                     Uploader.pickFile(RequestActivity.this);
                 }

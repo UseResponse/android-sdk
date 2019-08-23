@@ -34,21 +34,21 @@ public class RequestsListAdapter extends ArrayAdapter {
     @Override
     public View getView(int position, View convertView, @NonNull ViewGroup parent) {
         View view = convertView;
-        final RequestsListInterface item = (RequestsListInterface) items.get(position);
+        final RequestsListInterface item = items.get(position);
 
         if (item != null) {
             view = inflater.inflate(R.layout.request_row, null);
-            TextView rowName = (TextView)view.findViewById(R.id.requestRowName);
-            TextView rowDescription = (TextView)view.findViewById(R.id.requestRowDescription);
-            TextView rowStatus = (TextView)view.findViewById(R.id.requestRowStatus);
-            TextView rowDate = (TextView)view.findViewById(R.id.requestRowDate);
-            ImageView rowPhoto = (ImageView)view.findViewById(R.id.requestPhoto);
+            TextView rowName = view.findViewById(R.id.requestRowName);
+            TextView rowDescription = view.findViewById(R.id.requestRowDescription);
+            TextView rowStatus = view.findViewById(R.id.requestRowStatus);
+            TextView rowDate = view.findViewById(R.id.requestRowDate);
+            ImageView rowPhoto = view.findViewById(R.id.requestPhoto);
 
             rowName.setText(item.getTitle());
             rowDescription.setText(item.getDescription());
             Cache.getPhotosLoader(context).process(item.getPhotoUrl(), rowPhoto);
 
-            if (item.getRowType().equals("ticket")) {
+            /*if (item.getRowType().equals("ticket")) {
                 rowDate.setVisibility(View.GONE);
                 rowStatus.setVisibility(View.VISIBLE);
 
@@ -56,13 +56,13 @@ public class RequestsListAdapter extends ArrayAdapter {
                 rowStatus.setText(ticket.getStatus().getTitle());
                 rowStatus.setTextColor(Color.parseColor(ticket.getStatus().getTextColor()));
                 rowStatus.setBackgroundColor(Color.parseColor(ticket.getStatus().getBgColor()));
-            }
+            }*/
 
-            if (item.getRowType().equals("chat")) {
+            //if (item.getRowType().equals("chat")) {
                 rowStatus.setVisibility(View.GONE);
                 rowDate.setVisibility(View.VISIBLE);
                 rowDate.setText(new SimpleDateFormat("MMM dd", Locale.US).format(new Date(item.getUpdatedAt() * 1000L)));
-            }
+            //}
         }
 
         return view;
