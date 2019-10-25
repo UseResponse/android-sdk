@@ -1,6 +1,8 @@
 package com.useresponse.sdk.conversation;
 
 import android.content.Context;
+import android.content.Intent;
+import android.net.Uri;
 import android.support.annotation.NonNull;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -56,7 +58,22 @@ public class ConversationListAdapter extends ArrayAdapter {
                             outgoingImage.setVisibility(View.GONE);
                             outgoingText.setVisibility(View.GONE);
                             incomingText.setVisibility(View.VISIBLE);
-                            incomingText.setText(item.getText());
+
+
+                            String fileName = item.getFileName();
+                            if (fileName != null && fileName.length() > 0) {
+                                incomingText.setText(fileName);
+
+                                incomingText.setOnClickListener(new View.OnClickListener() {
+                                    @Override
+                                    public void onClick(View v) {
+                                        Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(item.getText()));
+                                        ConversationListAdapter.this.context.startActivity(browserIntent);
+                                    }
+                                });
+                            } else {
+                                incomingText.setText(item.getText());
+                            }
                     }
 
                     Cache.getPhotosLoader(context).process(item.getPhotoUrl(), rowPhoto);

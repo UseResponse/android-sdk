@@ -539,7 +539,18 @@ public class RequestActivity extends AppCompatActivity {
                         if (activeChat.getAuthor().getId() == message.getAuthor().getId()) {
                             activeChatMessages.add(new ConversationListItem("outgoing", messageType, messageContent, null));
                         } else {
-                            activeChatMessages.add(new ConversationListItem("incoming", messageType, messageContent, message.getAuthor().getAvatar().getMedium()));
+                            ConversationListItem newChatItem = new ConversationListItem(
+                                    "incoming",
+                                    messageType,
+                                    messageContent,
+                                    message.getAuthor().getAvatar().getMedium()
+                            );
+
+                            if (message.getFileName() != null && message.getFileName().length() > 0) {
+                                newChatItem.setFileName(message.getFileName());
+                            }
+
+                            activeChatMessages.add(newChatItem);
                         }
                     } catch (Exception e) {
                         Log.e("UrLog", e.getMessage() != null ? e.getMessage() : "Unknown error");
@@ -555,7 +566,18 @@ public class RequestActivity extends AppCompatActivity {
                         if (activeChat.getAuthor().getId() == message.getAuthor().getId()) {
                             activeChatMessages.add(0, new ConversationListItem("outgoing", message.getType(), message.getContent(), null));
                         } else {
-                            activeChatMessages.add(0, new ConversationListItem("incoming", message.getType(), message.getContent(), message.getAuthor().getAvatar().getMedium()));
+                            ConversationListItem newChatItem = new ConversationListItem(
+                                    "incoming",
+                                    message.getType(),
+                                    message.getContent(),
+                                    message.getAuthor().getAvatar().getMedium()
+                            );
+
+                            if (message.getFileName() != null && message.getFileName().length() > 0) {
+                                newChatItem.setFileName(message.getFileName());
+                            }
+
+                            activeChatMessages.add(0, newChatItem);
                         }
                     } catch (Exception e) {
                         Log.e("UrLog", e.getMessage() != null ? e.getMessage() : "Unknown error");
@@ -735,7 +757,13 @@ public class RequestActivity extends AppCompatActivity {
                     return;
                 }
 
-                activeChatMessages.add(new ConversationListItem("incoming", type, content, photo));
+                ConversationListItem newItem = new ConversationListItem("incoming", type, content, photo);
+
+                if (fileName != null && fileName.length() > 0) {
+                    newItem.setFileName(fileName);
+                }
+
+                activeChatMessages.add(newItem);
 
                 // otherwise it throws "Only the original thread that created a view hierarchy can touch its views."
                 runOnUiThread(new Runnable() {

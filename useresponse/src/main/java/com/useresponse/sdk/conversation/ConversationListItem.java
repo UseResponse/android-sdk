@@ -5,12 +5,17 @@ public class ConversationListItem {
     private String contentType;
     private String text;
     private String photo;
+    private String fileName;
 
     public ConversationListItem(String type, String contentType, String text, String photo) {
         this.type = type;
         this.contentType = contentType;
         this.text = text;
         this.photo = photo;
+    }
+
+    public void setFileName(String fileName) {
+        this.fileName = fileName;
     }
 
     public String getType() {
@@ -27,5 +32,9 @@ public class ConversationListItem {
 
     public String getContentType() {
         return contentType;
+    }
+
+    public String getFileName() {
+        return this.fileName;
     }
 }
