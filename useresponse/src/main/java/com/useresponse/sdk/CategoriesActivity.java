@@ -107,6 +107,8 @@ public class CategoriesActivity extends AppCompatActivity {
     }
 
     private void renderCategories() {
+        UseResponse.processButtonBack(this);
+
         ArrayList<Article> articles = Cache.getAllArticles();
         ArrayList<Category> categories = ApiHelper.getArticlesCategories(articles);
         ArrayList<GroupedListItem> categoriesArray = new ArrayList<>();

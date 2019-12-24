@@ -24,7 +24,9 @@ public class RequestsListChat implements RequestsListInterface {
 
     @Override
     public String getDescription() {
-        return lastMessage.getType().equals("text") ? lastMessage.getContent() : lastMessage.getType();
+        return lastMessage.getType().equals("text")
+                ? lastMessage.getMessages().get(0).getContent()
+                : lastMessage.getType();
     }
 
     @Override

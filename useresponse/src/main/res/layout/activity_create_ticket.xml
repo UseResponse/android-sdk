@@ -6,6 +6,17 @@
     android:layout_height="match_parent"
     tools:context="com.useresponse.sdk.CreateTicketActivity">
 
+    <View
+        android:id="@+id/goBackMargin"
+        style="@style/UrBackButtonBg"
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        android:background="@color/colorWhiteBg"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        android:visibility="gone" />
+
     <ListView
         android:id="@+id/createTicketFormList"
         style="@android:style/Widget.ListView.Menu"
@@ -14,7 +25,7 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/goBackMargin"
         android:descendantFocusability="beforeDescendants"/>
 
     <ProgressBar
@@ -32,4 +43,5 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
+    <include layout="@layout/back_button"/>
 </android.support.constraint.ConstraintLayout>

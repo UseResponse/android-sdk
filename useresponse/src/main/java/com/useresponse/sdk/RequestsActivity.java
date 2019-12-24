@@ -162,6 +162,8 @@ public class RequestsActivity extends AppCompatActivity {
     }
 
     private void renderRequests() {
+        UseResponse.processButtonBack(this);
+
         Tickets tickets = Cache.getAllTickets();
         Chats chats = Cache.getAllChats();
         final ArrayList<RequestsListInterface> requestsArray = new ArrayList<>();

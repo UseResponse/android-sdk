@@ -43,5 +43,7 @@
     <style name="UrArticleName" />
     <style name="UrArticleSectionName" />
     <style name="UrHorizontalLine" />
+    <style name="UrBackButton" />
+    <style name="UrBackButtonBg" />
 
 </resources>

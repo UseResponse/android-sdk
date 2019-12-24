@@ -156,6 +156,8 @@ public class ArticlesActivity extends AppCompatActivity {
             return;
         }
 
+        UseResponse.processButtonBack(this);
+
         ArrayList<GroupedListItem> articlesArray = new ArrayList<>();
         ArrayList<Category> categories = ApiHelper.getArticlesCategories(articles);
         //final ModelArticle[] artMap = new ModelArticle[articles.size() + categories.size() + 1];

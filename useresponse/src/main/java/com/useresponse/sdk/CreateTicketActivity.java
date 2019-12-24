@@ -73,6 +73,7 @@ public class CreateTicketActivity extends AppCompatActivity {
         form.addElement(body);
 
         if (Cache.getTicketCustomFields() != null) {
+            UseResponse.processButtonBack(this);
             addCustomFields();
             addSubmitButton();
             loader.setVisibility(View.GONE);
@@ -186,6 +187,8 @@ public class CreateTicketActivity extends AppCompatActivity {
                 Cache.setTicketCustomFields(fields);
                 addCustomFields();
             }
+
+            UseResponse.processButtonBack(CreateTicketActivity.this);
 
             addSubmitButton();
             loader.setVisibility(View.GONE);

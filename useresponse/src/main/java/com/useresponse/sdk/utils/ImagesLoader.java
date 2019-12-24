@@ -3,6 +3,7 @@ package com.useresponse.sdk.utils;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
+import android.util.Base64;
 import android.util.Log;
 import android.widget.ImageView;
 
@@ -21,6 +22,11 @@ public class ImagesLoader {
     }
 
     public void process(String url, ImageView photo) {
+        if (url.startsWith("data:")) {
+            processInline(url, photo);
+            return;
+        }
+
         Item item = queue.get(url);
 
         if (item == null) {
@@ -33,6 +39,14 @@ public class ImagesLoader {
         } else {
             photo.setImageBitmap(item.bitmap);
         }
+    }
+
+    private void processInline(String data, ImageView photo) {
+        data = data.replaceFirst("data:image/.+?;base64,", "");
+        byte[] content = Base64.decode(data, 0);
+        Bitmap bitmap = BitmapFactory.decodeByteArray(content, 0, content.length);
+        photo.setImageBitmap(bitmap);
+
     }
 
     private class Item {

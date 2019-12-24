@@ -1,7 +1,11 @@
 package com.useresponse.sdk.api;
 
+import android.util.Log;
+
 import org.json.JSONException;
 import org.json.JSONObject;
+
+import java.util.ArrayList;
 
 public class ChatMessage {
     private int id;
@@ -57,5 +61,30 @@ public class ChatMessage {
 
     public String getFileName() {
         return fileName;
+    }
+
+    public ArrayList<Message> getMessages() {
+        ArrayList<Message> messages = new ArrayList<>();
+
+        if (type.equals("text")) {
+            messages = ApiHelper.bbCodeToMessages(content != null ? content : "");
+        } else if (type.equals("article")) {
+            try {
+                JSONObject article = new JSONObject(content);
+                Message message = new Message();
+                message.setType("text");
+                message.setContent(article.getString("title") + "\n" + article.getString("link"));
+                messages.add(message);
+            } catch (Exception e) {
+                Log.e("UrLog", e.getMessage() != null ? e.getMessage() : "Unknown error");
+            }
+        } else {
+            Message message = new Message();
+            message.setType(type);
+            message.setContent(content);
+            messages.add(message);
+        }
+
+        return messages;
     }
 }

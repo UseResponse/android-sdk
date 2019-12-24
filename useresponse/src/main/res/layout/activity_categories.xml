@@ -7,6 +7,17 @@
     android:background="@color/colorGrayBg"
     tools:context="com.useresponse.sdk.CategoriesActivity">
 
+    <View
+        android:id="@+id/goBackMargin"
+        style="@style/UrBackButtonBg"
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        android:background="@color/colorWhiteBg"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        android:visibility="gone" />
+
     <ListView
         android:id="@+id/categoriesList"
         android:layout_width="0dp"
@@ -16,7 +27,7 @@
         style="@style/UrCategoriesList"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toBottomOf="@id/goBackMargin" />
 
     <ProgressBar
         android:id="@+id/categoriesLoader"
@@ -29,4 +40,5 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
+    <include layout="@layout/back_button"/>
 </android.support.constraint.ConstraintLayout>

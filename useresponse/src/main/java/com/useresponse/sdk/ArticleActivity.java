@@ -35,6 +35,8 @@ public class ArticleActivity extends AppCompatActivity {
             return;
         }
 
+        UseResponse.processButtonBack(this);
+
         WebView vw = (WebView)findViewById(R.id.articleBody);
 
         Intent intent = getIntent();

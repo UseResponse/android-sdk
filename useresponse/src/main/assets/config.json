@@ -1,8 +1,9 @@
 {
   "baseUrl": "https://dev.useresponse.com",
   "pushWsUrl": "wss://dev.useresponse.com:6998/ws",
-  "chatWsUrl": "wss://dev.useresponse.com:8443/ws",
+  "chatWsUrl": "wss://dev.useresponse.com:6999/ws",
   "forumId": 1,
+  "useNativeHeader": true,
   "modules": [
     "knowledge-base",
     "feedback",

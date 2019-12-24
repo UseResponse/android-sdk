@@ -7,6 +7,17 @@
     android:layout_height="match_parent"
     tools:context="com.useresponse.sdk.RequestsActivity">
 
+    <View
+        android:id="@+id/goBackMargin"
+        style="@style/UrBackButtonBg"
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        android:background="@color/colorWhiteBg"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        android:visibility="gone" />
+
     <ListView
         android:id="@+id/requestsList"
         android:layout_width="0dp"
@@ -19,7 +30,7 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toBottomOf="@id/goBackMargin" />
 
     <ProgressBar
         android:id="@+id/requestsLoader"
@@ -78,4 +89,6 @@
             fab:fab_icon="@drawable/ic_action_add"/>
 
     </com.getbase.floatingactionbutton.FloatingActionsMenu>
+
+    <include layout="@layout/back_button"/>
 </android.support.constraint.ConstraintLayout>

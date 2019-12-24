@@ -6,9 +6,12 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.StrictMode;
 import android.util.Log;
+import android.view.View;
+import android.widget.ImageButton;
 import android.widget.Toast;
 
 import com.useresponse.sdk.NotificationsService;
+import com.useresponse.sdk.R;
 import com.useresponse.sdk.RequestActivity;
 import com.useresponse.sdk.api.Api;
 import com.useresponse.sdk.api.IdentityData;
@@ -164,6 +167,17 @@ public class UseResponse {
         UseResponse.forumId = forumId;
     }
 
+    public static boolean usesNativeHeader(Context context) {
+        try {
+            return getConfig(context).getBoolean("useNativeHeader");
+        } catch (Exception e) {
+            Log.e("UrLog", e.getMessage() != null ? e.getMessage() : "Unknown error");
+            Toast.makeText(context, e.getMessage() != null ? e.getMessage() : "Unknown error", Toast.LENGTH_LONG).show();
+        }
+
+        return false;
+    }
+
     public static JSONObject getConfig(Context context) throws Exception {
         if (config == null) {
             config = new JSONObject(Assets.getContent(context, "config.json"));
@@ -197,5 +211,23 @@ public class UseResponse {
         SharedPreferences.Editor editor = activity.getSharedPreferences("useresponseui", Context.MODE_PRIVATE).edit();
         editor.putInt("singleChatId", chatId);
         editor.apply();
+    }
+
+    public static void processButtonBack(final Activity context) {
+        ImageButton button = context.findViewById(R.id.goBack);
+        View        margin = context.findViewById(R.id.goBackMargin);
+        if (button == null || margin == null) {
+            return;
+        }
+
+        boolean hide = usesNativeHeader(context);
+        button.setVisibility(hide ? View.GONE : View.VISIBLE);
+        margin.setVisibility(hide ? View.GONE : View.VISIBLE);
+        button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                context.finish();
+            }
+        });
     }
 }
