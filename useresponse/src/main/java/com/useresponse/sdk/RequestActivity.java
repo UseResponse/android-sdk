@@ -71,6 +71,7 @@ public class RequestActivity extends AppCompatActivity {
     private int messagePages = 1;
     private int currentPage = 1;
     private int topId = 0;
+    private boolean chatIdRequested = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -176,8 +177,11 @@ public class RequestActivity extends AppCompatActivity {
                         (new LoadChatMessagesTask(1)).execute();
                     } else {
                         Log.e("UrLog", "Chat is not found");
+                        requestId = 0;
                     }
-                } else {
+                }
+
+                if (requestId == 0) {
                     conversationLoader.setVisibility(View.GONE);
                     conversationList.setVisibility(View.VISIBLE);
                     activeChat = new Chat();
@@ -530,6 +534,10 @@ public class RequestActivity extends AppCompatActivity {
                         String messageType    = message.getType();
                         String messageContent = message.getContent();
 
+                        if (messageType.equals("join_chat")) {
+                            continue;
+                        }
+
                         if (messageType.equals("article")) {
                             messageType = "text";
                             JSONObject article = new JSONObject(messageContent);
@@ -706,6 +714,10 @@ public class RequestActivity extends AppCompatActivity {
         send.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                if (activeChat.getId() == 0 && chatIdRequested) {
+                    return;
+                }
+
                 String message = input.getText().toString();
 
                 if (message.length() > 0) {
@@ -714,6 +726,10 @@ public class RequestActivity extends AppCompatActivity {
                     BaseAdapter adapter = (BaseAdapter)conversationList.getAdapter();
                     adapter.notifyDataSetChanged();
                     conversationList.setSelection(adapter.getCount() - 1);
+
+                    if (activeChat.getId() == 0) {
+                        chatIdRequested = true;
+                    }
 
                     Cache.touchChat(activeChat.getId());
                     RequestsActivity.needRefresh = true;
@@ -785,6 +801,8 @@ public class RequestActivity extends AppCompatActivity {
 
             @Override
             public void setChatId(int chatId) {
+                chatIdRequested = false;
+
                 if (activeChat.getId() == 0) {
                     activeChat.setId(chatId);
                     UseResponse.saveSingleChat(RequestActivity.this, chatId);

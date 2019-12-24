@@ -373,7 +373,9 @@ public class NotificationsService extends Service {
                     JSONObject pushContent = message.getJSONObject("content");
                     chatId = message.getInt("conversation");
 
-                    if (pushContent.getString("type").equals("message")) {
+                    if (pushContent.getString("type").equals("join_chat")) {
+                        return;
+                    } else if (pushContent.getString("type").equals("message")) {
                         chatType    = "text";
                         chatContent = pushContent.getString("body");
                     } else {
