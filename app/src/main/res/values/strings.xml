@@ -4,4 +4,5 @@
     <string name="kb_articles">All Articles</string>
     <string name="my_tickets">My Requests</string>
     <string name="single_chat">Single Chat</string>
+    <string name="re_login">ReLogin</string>
 </resources>

@@ -12,6 +12,7 @@ import com.useresponse.sdk.CategoriesActivity;
 import com.useresponse.sdk.RequestsActivity;
 import com.useresponse.sdk.api.Api;
 import com.useresponse.sdk.api.IdentityData;
+import com.useresponse.sdk.utils.Cache;
 import com.useresponse.sdk.utils.UseResponse;
 
 public class MainActivity extends AppCompatActivity {
@@ -80,6 +81,22 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 UseResponse.openSingleChat(MainActivity.this);
+            }
+        });
+
+        Button reLogin = findViewById(R.id.reLogin);
+        reLogin.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                IdentityData identityData = new IdentityData(
+                        "c70d55adde01752adb5fad66920e4ebffed4f94d56774fad780439749e4d4601",
+                        "kurchik.sasha@mail.ru"
+                );
+                identityData.setFirstName("Alex");
+                identityData.setLastName("Kurchik");
+                Api.setIdentityData(identityData);
+                UseResponse.clearIdentity(MainActivity.this);
+                Cache.clear();
             }
         });
     }

@@ -92,6 +92,14 @@ public class UseResponse {
         return apiKey.length() > 0;
     }
 
+    public static void clearIdentity(Activity activity) {
+        apiKey = null;
+        SharedPreferences.Editor editor;
+        editor = activity.getSharedPreferences("useresponseui", Context.MODE_PRIVATE).edit();
+        editor.clear();
+        editor.apply();
+    }
+
     public static String getApiKey() {
         return apiKey;
     }
@@ -169,7 +177,8 @@ public class UseResponse {
 
     public static boolean usesNativeHeader(Context context) {
         try {
-            return getConfig(context).getBoolean("useNativeHeader");
+            JSONObject config = getConfig(context);
+            return config.has("useNativeHeader") && config.getBoolean("useNativeHeader");
         } catch (Exception e) {
             Log.e("UrLog", e.getMessage() != null ? e.getMessage() : "Unknown error");
             Toast.makeText(context, e.getMessage() != null ? e.getMessage() : "Unknown error", Toast.LENGTH_LONG).show();

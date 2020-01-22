@@ -21,6 +21,19 @@ public class Cache {
     private static int chatPages = 1;
     private static int ticketPages = 1;
 
+    public static void clear()
+    {
+        allArticles = null;
+        allTickets = null;
+        allChats = null;
+        ticketCustomFields = null;
+        imagesLoader = null;
+        photosLoader = null;
+        currentPage = 1;
+        chatPages = 1;
+        ticketPages = 1;
+    }
+
     public static void setAllArticles(ArrayList<Article> articles) {
         allArticles = articles;
     }
